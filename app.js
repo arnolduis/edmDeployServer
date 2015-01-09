@@ -3,13 +3,17 @@
  * Module dependencies.
  */
 
-var express = require('express');
-var routes = require('./routes');
-var user = require('./routes/user');
-var http = require('http');
-var path = require('path');
+ var express = require('express');
+ var routes = require('./routes');
+ var user = require('./routes/user');
+ var http = require('http');
+ var path = require('path');
+ var fs    = require('fs');
+ var nconf = require('nconf');
+ var client = require('scp2');
+ var Connection = require('ssh2');
 
-var app = express();
+ var app = express();
 
 // all environments
 app.set('port', process.env.PORT || 3000);
@@ -25,64 +29,81 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // development only
 if ('development' == app.get('env')) {
-  app.use(express.errorHandler());
+	app.use(express.errorHandler());
 }
 
-app.get('/', routes.index);
-app.get('/users', user.list);
 
 
+nconf.argv().env().file({ file: './config/config.json' });
+
+var commands = nconf.get("commands");
+var servers = nconf.get("servers");
+var privateKey = nconf.get("privateKey");
 
 
+applyCommand('turdus','deploy');
 
-
-var client = require('scp2');
-
-client.scp('test.txt', {
-  host: 'turdus.itk.ppke.hu',
-  port: 22,
-  username: 'ferar',
-  privateKey: require('fs').readFileSync('C://cygwin64/home/arnolduis/.ssh/id_dsa'),
-  path: '/home/ferar/'
-}, function(err) {
-
-
-	var Connection = require('ssh2');
+function applyCommand (server, command) {
 
 	var conn = new Connection();
+
 	conn.on('ready', function() {
-	  console.log('Connection :: ready');
-	  conn.exec('tail test.txt', function(err, stream) {
-	    if (err) throw err;
-	    stream.on('exit', function(code, signal) {
-	      console.log('Stream :: exit :: code: ' + code + ', signal: ' + signal);
-	    }).on('close', function() {
-	      console.log('Stream :: close');
-	      conn.end();
-	    }).on('data', function(data) {
-	      console.log('STDOUT: ' + data);
-	    }).stderr.on('data', function(data) {
-	      console.log('STDERR: ' + data);
-	    });
-	  });
+
+		if (Object.keys(commands[command]).length > 1) {
+
+			console.log('==== Copying file and executing command');
+
+			conn.sftp(function (err, sftp) {
+				if (err) throw err;
+
+				sftp.fastPut(commands[command].file, commands[command].path, {}, function (err) {
+
+					console.log(err ? "Could not deploy. " : "File sent, executing command...");
+
+					conn.exec(commands[command].command, function(err, stream) {
+						if (err) throw err;
+						stream.on('exit', function(code, signal) {
+							// console.log('Stream :: exit :: code: ' + code + ', signal: ' + signal);
+						}).on('close', function() {
+							// console.log('Stream :: close');
+							conn.end();
+						}).on('data', function(data) {
+							console.log('==== COMMAND OUTPUT: \n' + data + '\n');
+						}).stderr.on('data', function(data) {
+							console.log('==== COMMAND ERROR: \n' + data + '\n');
+						});
+					});
+				});
+			});	
+
+		} else {
+
+			console.log('==== Executing command');
+
+			conn.exec(commands[command].command, function(err, stream) {
+				if (err) throw err;
+				stream.on('exit', function(code, signal) {
+					// console.log('Stream :: exit :: code: ' + code + ', signal: ' + signal);
+				}).on('close', function() {
+					// console.log('Stream :: close');
+					conn.end();
+				}).on('data', function(data) {
+					console.log('==== COMMAND OUTPUT: \n' + data + '\n');
+				}).stderr.on('data', function(data) {
+					console.log('==== COMMAND ERROR: \n' + data + '\n');
+				});
+			});
+		}
+
 	}).connect({
-	  host: 'turdus.itk.ppke.hu',
-	  port: 22,
-	  username: 'ferar',
-	  privateKey: require('fs').readFileSync('C://cygwin64/home/arnolduis/.ssh/id_dsa')
+		host: servers[server].host,
+		port: servers[server].port,
+		username: servers[server].username,
+		privateKey: fs.readFileSync(privateKey),
 	});
-	
-});
-
-
-
-
-
-
-
-
+}
 
 
 // http.createServer(app).listen(app.get('port'), function(){
-  console.log('Express server listening on port ' + app.get('port'));
+	console.log('Express server listening on port ' + app.get('port'));
 // });

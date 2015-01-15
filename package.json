@@ -9,6 +9,7 @@
     "express": "3.5.0",
     "ejs": "*",
     "nconf": "*",
+    "socket.io": "*",
     "scp2": "*",
     "ssh2": "*"
   }

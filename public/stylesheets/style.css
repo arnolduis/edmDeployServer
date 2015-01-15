@@ -1,8 +1,25 @@
 body {
-  padding: 50px;
+  padding: 0px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
   color: #00B7FF;
+}
+
+.widget	{
+	background-color: #99f;
+	margin: 5px;
+}
+
+#file, #output {
+	float: left;
+	width: 48%;
+	min-height: 600px;
+}
+
+.widget textarea {
+	width: 90%;
+	height: auto;
+	min-height: 400px;
 }

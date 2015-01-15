@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+  <head>
+    <title>EDM Deploy Server</title>
+    <link rel="stylesheet" href="/stylesheets/style.css">
+    <script src="/javascripts/jquery-1.11.1.min.js"></script>
+    <script src="/javascripts/knockout-3.1.0.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script src="homeVM.js"></script>
+  
+  </head>
+  <body>
+
+    <div class="widget">
+        <h2>Servers</h2>
+        <select data-bind="options: servers, optionsText: 'text', selectedOptions: selectedServers" size="3" multiple="true"></select>
+        <ul data-bind="foreach: selectedServers">
+            <li data-bind="text: text"></li>
+        </ul>
+    </div>
+
+    <div class="widget" id="file">
+        <h2>Command</h2>
+        <select data-bind="options: commands, optionsText: 'text', value: selectedCommand"></select>
+        <div> <b>Command:</b> <input data-bind="value: selectedCommand().value.command"></input> </div>
+        <div data-bind="visible: selectedCommand().value.file"> <b>File:</b> <span data-bind="text: selectedCommand().value.file"></span> </div>
+        <div data-bind="visible: selectedCommand().value.path"> <b>Path:</b> <input data-bind="value: selectedCommand().value.path"></input> </div>
+        <textarea data-bind="value: file, visible: selectedCommand().value.file"></textarea />
+        <div>
+            <button data-bind="click: saveAndApply">Save and Apply</button>
+        </div>        
+    </div>
+
+    <div class="widget" id="output">
+        <h2>Output:</h2>
+        <textarea data-bind="value: output"></textarea>
+    </div>
+
+
+  </body>
+</html>

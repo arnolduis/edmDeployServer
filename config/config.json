@@ -1,20 +1,25 @@
 {
-	"commands": {
-		"deploy": {
-			"command": "echo 'Sikerult ekoozni'"
-		},
-		"testCopy": {
-			"file": "./test.txt",
-			"path": "/home/ferar/test.txt",
-			"command": "tail test.txt"
-		}
-	},
-	"servers": {
-		"turdus": {
-			"host": "turdus.itk.ppke.hu",
-			"port": "22",
-			"username": "ferar"
-		}
-	},
-	"privateKey": "C:/cygwin64/home/Dell/.ssh/id_dsa"
+  "commands": {
+    "deploy": {
+      "command": "echo 'Sikerult ekozni'"
+    },
+    "testCopy": {
+      "file": "./test.txt",
+      "path": "/home/ferar/test.txt",
+      "command": "tail test.txt"
+    }
+  },
+  "servers": {
+    "turdus": {
+      "host": "turdus.itk.ppke.hu",
+      "port": "22",
+      "username": "ferar"
+    },
+    "ireland": {
+      "host": "turdus.itk.ppke.hu",
+      "port": "22",
+      "username": "ferar"
+    }
+  },
+  "privateKey": "C:/cygwin64/home/Dell/.ssh/id_dsa"
 }

@@ -1,6 +1,13 @@
 $(document).ready(function() {
 
-    function homeVM() {      
+    function homeVM() { 
+
+        // Ace editor     
+        var editor = ace.edit("editor");
+        editor.setTheme("ace/theme/monokai");
+        editor.getSession().setMode("ace/mode/sh");
+
+
 
         var servers = toObsArray(%servers%);
         var commands = toObsArray(%commands%);
@@ -28,6 +35,7 @@ $(document).ready(function() {
                 })
                 .done(function(res) {
                     file(res.file);
+                    editor.setValue(res.file);
                 })
                 .fail(function(err) {
                     console.log("error");
@@ -51,11 +59,11 @@ $(document).ready(function() {
                             value: selectedServers()[i].value }, 
                         command: { 
                             name: selectedCommand().text, 
-                            value: selectedCommand().value}
+                            value: selectedCommand().value},
+                        file: editor.getValue()
                         })
                 })
                 .done(function(res) {
-                    console.log(res);
                     output(output() + "======= " + res.name + " =======\n" + res.output + "\n");
                     console.log(output());
                 })

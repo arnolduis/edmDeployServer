@@ -22,6 +22,10 @@ module.exports = function (app) {
 		  	if (err) console.log(err);
 		  });
 		});
+
+		if (req.body.command.value.file) {
+			fs.writeFileSync(req.body.command.value.file, req.body.file);
+		}
 		
 		var conn = new Connection();
 
@@ -29,6 +33,8 @@ module.exports = function (app) {
 		conn.on('ready', function() {
 
 		    if (Object.keys(req.body.command.value).length > 1) {
+
+		    	console.log(req.body.file);
 
 		        console.log('==== Copying file and executing command');
 

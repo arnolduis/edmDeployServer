@@ -23,3 +23,9 @@ a {
 	height: auto;
 	min-height: 400px;
 }
+
+#editor { 
+	width: 90%;
+	height: auto;
+	min-height: 400px;
+}

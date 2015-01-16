@@ -1,7 +1,7 @@
 {
   "commands": {
     "deploy": {
-      "command": "echo 'Sikerult ekozni'"
+      "command": "echo 'Sikerult ekoozni'"
     },
     "testCopy": {
       "file": "./test.txt",

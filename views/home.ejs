@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="/stylesheets/style.css">
     <script src="/javascripts/jquery-1.11.1.min.js"></script>
     <script src="/javascripts/knockout-3.1.0.js"></script>
+    <script src="javascripts/src-min-noconflict/ace.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
     <script src="homeVM.js"></script>
@@ -26,7 +27,8 @@
         <div> <b>Command:</b> <input data-bind="value: selectedCommand().value.command"></input> </div>
         <div data-bind="visible: selectedCommand().value.file"> <b>File:</b> <span data-bind="text: selectedCommand().value.file"></span> </div>
         <div data-bind="visible: selectedCommand().value.path"> <b>Path:</b> <input data-bind="value: selectedCommand().value.path"></input> </div>
-        <textarea data-bind="value: file, visible: selectedCommand().value.file"></textarea />
+        <!-- <textarea data-bind="value: file, visible: selectedCommand().value.file"></textarea /> -->
+        <div id="editor" data-bind="visible: selectedCommand().value.file"></div>
         <div>
             <button data-bind="click: saveAndApply">Save and Apply</button>
         </div>        
@@ -35,8 +37,12 @@
     <div class="widget" id="output">
         <h2>Output:</h2>
         <textarea data-bind="value: output"></textarea>
+
     </div>
 
 
   </body>
 </html>
+
+        <!-- <div id="editor" data-bind="value: file, visible: selectedCommand().value.file"></div> -->
+    <!-- // <script src="javascripts/src-min-noconflict/ace.js"></script> -->

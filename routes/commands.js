@@ -5,7 +5,8 @@ nconf.file({ file: 'config/config.json' });
 var privateKey = nconf.get("privateKey");
 
 
-module.exports = function (app) {
+module.exports = function (app, io) {
+
 
 	app.post('/commands/getFile', function (req, res) {
 		fs.readFile(req.body.file, 'utf8', function (err, result) {
@@ -29,6 +30,7 @@ module.exports = function (app) {
 		
 		var conn = new Connection();
 
+		var exitcode = null;
 
 		conn.on('ready', function() {
 
@@ -36,7 +38,7 @@ module.exports = function (app) {
 
 		    	console.log(req.body.file);
 
-		        console.log('==== Copying file and executing command');
+		        console.log('==== Copying file and executing command ====');
 
 		        conn.sftp(function (err, sftp) {
 		            if (err) throw err;
@@ -45,41 +47,47 @@ module.exports = function (app) {
 
 		                console.log(err ? "Could not deploy. " : "File sent, executing command...");
 
-		                conn.exec(req.body.command.value.command, function(err, stream) {
-		                    if (err) throw err;
-		                    stream.on('exit', function(code, signal) {
-		                        // console.log('Stream :: exit :: code: ' + code + ', signal: ' + signal);
-		                    }).on('close', function() {
-		                        // console.log('Stream :: close');
-		                        conn.end();
-		                    }).on('data', function(data) {
-		                        console.log('==== COMMAND OUTPUT: \n' + data + '\n');
-		            			res.send({name: req.body.server.name, output: data.toString()});
-		                    }).stderr.on('data', function(data) {
-		                        console.log('==== COMMAND ERROR: \n' + data + '\n');
-		                    });
-		                });
+            	        conn.exec(req.body.command.value.command, function(err, stream) {
+            	        	if (err) throw err;
+            	        	stream.on('exit', function(code, signal) {
+            	        		console.log('Stream :: exit :: code: ' + code + ', signal: ' + signal);
+            	        		exitcode = code;
+            	        	}).on('close', function() {
+            	        		console.log('Stream :: close');
+		            			io.emit('stdout', { name: req.body.server.name, output: "\n" } );
+            	        		conn.end();
+			                	res.send({ code: exitcode });
+            	        	}).on('data', function(data) {
+            	        		console.log('STDOUT: ' + data);
+		            			io.emit('stdout', { name: req.body.server.name, output: data.toString() } );
+            	        	}).stderr.on('data', function(data) {
+            	        		console.log('STDERR: ' + data);
+            	        	});
+            	        });
 		            });
 		        }); 
 
 		    } else {
 
-		        console.log('==== Executing command');
+		        console.log('==== Executing command ====');
 
-		        conn.exec(req.body.command.value.command, function(err, stream) {
-		            if (err) throw err;
-		            stream.on('exit', function(code, signal) {
-		                // console.log('Stream :: exit :: code: ' + code + ', signal: ' + signal);
-		            }).on('close', function() {
-		                // console.log('Stream :: close');
-		                conn.end();
-		            }).on('data', function(data) {
-		                console.log('==== COMMAND OUTPUT: \n' + data + '\n');
-		            		res.send({name: req.body.server.name, output: data.toString()});
-		            }).stderr.on('data', function(data) {
-		                console.log('==== COMMAND ERROR: \n' + data + '\n');
-		            });
-		        });
+    	        conn.exec(req.body.command.value.command, function(err, stream) {
+    	        	if (err) throw err;
+    	        	stream.on('exit', function(code, signal) {
+    	        		console.log('Stream :: exit :: code: ' + code + ', signal: ' + signal);
+    	        		exitcode = code;
+    	        	}).on('close', function() {
+    	        		console.log('Stream :: close');
+		            	io.emit('stdout', { name: req.body.server.name, output: "\n" } );
+    	        		conn.end();
+	                	res.send({ code: exitcode });
+    	        	}).on('data', function(data) {
+    	        		console.log('STDOUT: ' + data);
+            			io.emit('stdout', { name: req.body.server.name, output: data.toString() } );
+    	        	}).stderr.on('data', function(data) {
+    	        		console.log('STDERR: ' + data);
+    	        	});
+    	        });
 		    }
 
 		}).on('error', function (err) {

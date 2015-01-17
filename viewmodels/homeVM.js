@@ -6,6 +6,7 @@ $(document).ready(function() {
         var editor = ace.edit("editor");
         editor.setTheme("ace/theme/monokai");
         editor.getSession().setMode("ace/mode/sh");
+        editor.$blockScrolling = Infinity;
 
 
 
@@ -13,8 +14,15 @@ $(document).ready(function() {
         var commands = toObsArray(%commands%);
 
         var command = ko.observable();
-        // var commandOutputs = ko.observableArray();
-        var output = ko.observable("");
+
+        var output = ko.observable({});
+        var fullOutput = ko.computed(function () {
+            var buff = "";
+            for (var i in output()) {
+                buff = buff + " ========== " + i + " ========== \n"+ output()[i] + "\n";
+            }
+            return  buff;
+        }, this);
 
         var selectedServers = ko.observableArray([servers()[0]]);
         var selectedCommand = ko.observable(commands()[0]);
@@ -64,8 +72,8 @@ $(document).ready(function() {
                         })
                 })
                 .done(function(res) {
-                    output(output() + "======= " + res.name + " =======\n" + res.output + "\n");
-                    console.log(output());
+
+                    console.log(res); 
                 })
                 .fail(function(err) {
                     console.log("error");
@@ -73,13 +81,24 @@ $(document).ready(function() {
                 });
             }
 
-        }        
+        }      
+
+
+
+
+
 
         var socket = io.connect("http://localhost");
         socket.on("connect", function () {
             console.log("Connected!");
         });
-        socket.on("news", function (data) {
+        socket.on("stdout", function (data) {
+            var buff = output();
+            buff[data.name] = buff[data.name] ? buff[data.name]: "";
+            buff[data.name] = buff[data.name]  + data.output;
+            // buff[data.name] = buff[data.name] + "[" + new Date().format("isoDateTime") + "]\n" + data.output + "\n";
+            output(buff);
+            $('#outputTextArea').scrollTop($('#outputTextArea')[0].scrollHeight);
             console.log(data);
         });
         socket.emit("message", {data: 'heloka'});
@@ -101,6 +120,7 @@ $(document).ready(function() {
             selectedServers: selectedServers,
             selectedCommand: selectedCommand,
             command: command,
+            fullOutput: fullOutput,
             // commandOutputs: commandOutputs,
             output: output,
             file: file,

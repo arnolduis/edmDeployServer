@@ -15,6 +15,6 @@
 16 echo "szoveg"
 17
 18 es csak a vege
-19 szoval ezitten van!!!
+19 szoval ezitten van
 20
 21

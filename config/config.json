@@ -1,12 +1,17 @@
 {
   "commands": {
     "deploy": {
-      "command": "echo 'Sikerult ekoozni'"
+      "command": "echo 'Sikerult ekozni'"
     },
     "testCopy": {
-      "file": "./test.txt",
+      "file": "./scripts/test.txt",
       "path": "/home/ferar/test.txt",
-      "command": "tail test.txt"
+      "command": "tail ./test.txt"
+    },
+    "testStream": {
+      "file": "./testStream.txt",
+      "path": "/home/ferar/testStream.sh",
+      "command": "chmod a+x ./testStream.sh; ./testStream.sh"
     }
   },
   "servers": {

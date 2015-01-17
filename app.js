@@ -30,23 +30,7 @@ if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
-require('./routes')(app);
-
-
-io.on('çonnection', function (socket) {
-	console.log('a User connected');
-});
-
-
-
-// applyCommand('turdus','deploy');
-
-
-
-
-
-
-
+// ==================== Logic ==========================
 
 var server = app.listen(app.get('port'));
 console.log('Express server listening on port ' + app.get('port'));
@@ -60,3 +44,8 @@ io.on('connection', function (socket) {
 		console.log(data);
 	});
 });
+
+require('./routes')(app, io);
+
+
+

@@ -22,6 +22,8 @@ a {
 	width: 90%;
 	height: auto;
 	min-height: 400px;
+	background-color: #272822;
+	color: #eee;
 }
 
 #editor { 

@@ -6,6 +6,7 @@
     <script src="/javascripts/jquery-1.11.1.min.js"></script>
     <script src="/javascripts/knockout-3.1.0.js"></script>
     <script src="javascripts/src-min-noconflict/ace.js"></script>
+    <script src="javascripts/dateFormat.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
     <script src="homeVM.js"></script>
@@ -36,7 +37,7 @@
 
     <div class="widget" id="output">
         <h2>Output:</h2>
-        <textarea data-bind="value: output"></textarea>
+        <textarea id="outputTextArea" data-bind="value: fullOutput"></textarea>
 
     </div>
 

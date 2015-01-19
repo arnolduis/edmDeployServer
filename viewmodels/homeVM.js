@@ -15,14 +15,64 @@ $(document).ready(function() {
 
         var command = ko.observable();
 
-        var output = ko.observable({});
-        var fullOutput = ko.computed(function () {
+        
+
+
+
+
+        var outputData  = ko.observable({});
+        var outputServers = ko.observableArray([]);
+        outputServers.push({name: 'full'});
+        for(var i in servers()) {
+            outputServers.push({name: servers()[i].text});
+        }
+
+        var output = ko.observable("");
+        var selectedOutput = ko.observable("full");
+
+
+
+        var socket = io.connect("http://localhost");
+        socket.on("connect", function () {
+            console.log("Socket.io connected!");
+        });
+        socket.on("stdout", function (data){
+            var buff = outputData();
+            buff[data.name] = buff[data.name] ? buff[data.name] : "";
+            buff[data.name] = buff[data.name] + data.output;
+            buff.full = generateFull();
+            outputData(buff);
+            output(outputData()[selectedOutput()]);
+            $('#outputTextArea').scrollTop($('#outputTextArea')[0].scrollHeight);
+        });
+
+        function generateFull () {
             var buff = "";
-            for (var i in output()) {
-                buff = buff + " ========== " + i + " ========== \n"+ output()[i] + "\n";
+            for (var i in outputData()) {
+                if (i != "full") {
+                    buff = buff + " ========== " + i + " ========== \n"+ outputData()[i] + "\n";
+                }
             }
-            return  buff;
-        }, this);
+            return buff;
+        }
+
+
+        function showTab () {
+            selectedOutput(this.name);
+            output(outputData()[selectedOutput()]);
+        }  
+
+
+
+
+
+
+
+
+
+
+
+
 
         var selectedServers = ko.observableArray([servers()[0]]);
         var selectedCommand = ko.observable(commands()[0]);
@@ -33,7 +83,6 @@ $(document).ready(function() {
 
         selectedCommand.subscribe(function () {
             if (selectedCommand().value.file) {
-                console.log('subs: ' + JSON.stringify({ file: selectedCommand().value.file }));
                 $.ajax({
                     url: 'commands/getFile',
                     type: 'POST',
@@ -51,7 +100,6 @@ $(document).ready(function() {
                 });
             }
         });
-
 
         function saveAndApply () {
 
@@ -72,36 +120,22 @@ $(document).ready(function() {
                         })
                 })
                 .done(function(res) {
+                    // console.log(res); 
 
-                    console.log(res); 
                 })
                 .fail(function(err) {
                     console.log("error");
                     console.log(err);
                 });
             }
-
-        }      
-
+        }    
 
 
 
 
 
-        var socket = io.connect("http://localhost");
-        socket.on("connect", function () {
-            console.log("Connected!");
-        });
-        socket.on("stdout", function (data) {
-            var buff = output();
-            buff[data.name] = buff[data.name] ? buff[data.name]: "";
-            buff[data.name] = buff[data.name]  + data.output;
-            // buff[data.name] = buff[data.name] + "[" + new Date().format("isoDateTime") + "]\n" + data.output + "\n";
-            output(buff);
-            $('#outputTextArea').scrollTop($('#outputTextArea')[0].scrollHeight);
-            console.log(data);
-        });
-        socket.emit("message", {data: 'heloka'});
+
+
 
         function toObsArray(obj) {
             var result = [];
@@ -119,15 +153,18 @@ $(document).ready(function() {
             servers: servers,
             selectedServers: selectedServers,
             selectedCommand: selectedCommand,
+            selectedOutput: selectedOutput,
             command: command,
-            fullOutput: fullOutput,
+            // fullOutput: fullOutput,
             // commandOutputs: commandOutputs,
             output: output,
+            outputServers: outputServers,
             file: file,
             fileName: fileName,
 
             // methods
             saveAndApply: saveAndApply,
+            showTab: showTab
         };
     }
 

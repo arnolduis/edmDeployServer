@@ -31,3 +31,21 @@ a {
 	height: auto;
 	min-height: 400px;
 }
+
+li {
+	display: inline-block;
+	list-style:none;
+	color: #272822;
+}
+
+a {
+	border: 1px solid #272822;
+	padding: 0px 3px;
+	margin:0px;
+	color: #272822;
+	text-decoration: none;
+}
+
+.selectedTab {
+	background-color: #def;
+}

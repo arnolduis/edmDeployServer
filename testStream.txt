@@ -6,4 +6,4 @@ do
     echo $i
 done
 
-echo $((RANDOM % 2))
+exit $((RANDOM % 2))

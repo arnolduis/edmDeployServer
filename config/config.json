@@ -5,7 +5,7 @@
     },
     "testCopy": {
       "file": "./scripts/test.txt",
-      "path": "/home/ferar/test.txt",
+      "path": "/home/ferar/cns.sh",
       "command": "tail ./test.txt"
     },
     "testStream": {
@@ -15,12 +15,22 @@
     }
   },
   "servers": {
-    "turdus": {
+    "Test": {
       "host": "turdus.itk.ppke.hu",
       "port": "22",
       "username": "ferar"
     },
-    "ireland": {
+    "Ireland": {
+      "host": "turdus.itk.ppke.hu",
+      "port": "22",
+      "username": "ferar"
+    },
+    "Sydney": {
+      "host": "turdus.itk.ppke.hu",
+      "port": "22",
+      "username": "ferar"
+    },
+    "Virginia": {
       "host": "turdus.itk.ppke.hu",
       "port": "22",
       "username": "ferar"

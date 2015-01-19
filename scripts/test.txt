@@ -1,20 +1,5 @@
-01 eyyitta tesytsyoveg
-02
-03
-04
-05
-06
-07
-08
-09
-10
-12
-13
-14\
-15
-16 echo "szoveg"
-17
-18 es csak a vege
-19 szoval ezitten van
-20
-21
+#!/bin/bash
+
+echo 'cns script lefutott'
+
+exit 0

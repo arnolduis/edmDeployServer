@@ -16,10 +16,8 @@
 
     <div class="widget">
         <h2>Servers</h2>
-        <select data-bind="options: servers, optionsText: 'text', selectedOptions: selectedServers" size="3" multiple="true"></select>
-        <ul data-bind="foreach: selectedServers">
-            <li data-bind="text: text"></li>
-        </ul>
+        <select data-bind="options: servers, optionsText: 'text', selectedOptions: selectedServers" size="5" multiple="true"></select>
+
     </div>
 
     <div class="widget" id="file">
@@ -37,7 +35,14 @@
 
     <div class="widget" id="output">
         <h2>Output:</h2>
-        <textarea id="outputTextArea" data-bind="value: fullOutput"></textarea>
+        <ul data-bind="foreach: outputServers">
+            <li>
+                <a href="#" class="$index()" data-bind="click: $parent.showTab, text: name, css: {selectedTab:  $parent.selectedOutput() == name}"></a>
+            </li>
+        </ul>
+        <br>
+        <br>
+        <textarea id="outputTextArea" data-bind="value: output"></textarea>
 
     </div>
 

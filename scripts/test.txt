@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo 'cns script lefutott'
-
-exit 0

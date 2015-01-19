@@ -16,21 +16,19 @@
 
     <div class="widget">
         <h2>Servers</h2>
-        <select data-bind="options: servers, optionsText: 'text', selectedOptions: selectedServers" size="5" multiple="true"></select>
-
+        <select data-bind="options: servers, optionsText: 'name', selectedOptions: selectedServers" size="4" multiple="true"></select>
+            <button class="bigred" data-bind="click: deploy">Deploy<br>it!</button>
     </div>
 
     <div class="widget" id="file">
         <h2>Command</h2>
-        <select data-bind="options: commands, optionsText: 'text', value: selectedCommand"></select>
+        <select data-bind="options: commands, optionsText: 'name', value: selectedCommand"></select>
         <div> <b>Command:</b> <input data-bind="value: selectedCommand().value.command"></input> </div>
-        <div data-bind="visible: selectedCommand().value.file"> <b>File:</b> <span data-bind="text: selectedCommand().value.file"></span> </div>
+        <div data-bind="visible: selectedCommand().value.file"> <b>File:</b> <input data-bind="value: selectedCommand().value.file"></input> </div>
         <div data-bind="visible: selectedCommand().value.path"> <b>Path:</b> <input data-bind="value: selectedCommand().value.path"></input> </div>
         <!-- <textarea data-bind="value: file, visible: selectedCommand().value.file"></textarea /> -->
         <div id="editor" data-bind="visible: selectedCommand().value.file"></div>
-        <div>
-            <button data-bind="click: saveAndApply">Save and Apply</button>
-        </div>        
+        <button data-bind="click: saveAndApply">Save and Apply</button>
     </div>
 
     <div class="widget" id="output">
@@ -42,8 +40,9 @@
         </ul>
         <br>
         <br>
-        <textarea id="outputTextArea" data-bind="value: output"></textarea>
-
+        <div class="textAreaContainer">
+            <textarea id="outputTextArea" data-bind="value: output"></textarea>
+        </div>
     </div>
 
 

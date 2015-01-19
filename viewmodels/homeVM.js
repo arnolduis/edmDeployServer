@@ -10,6 +10,8 @@ $(document).ready(function() {
 
 
 
+        var serversRaw = %servers%;
+        var commandsRaw = %commands%;
         var servers = toObsArray(%servers%);
         var commands = toObsArray(%commands%);
 
@@ -24,7 +26,7 @@ $(document).ready(function() {
         var outputServers = ko.observableArray([]);
         outputServers.push({name: 'full'});
         for(var i in servers()) {
-            outputServers.push({name: servers()[i].text});
+            outputServers.push({name: servers()[i].name});
         }
 
         var output = ko.observable("");
@@ -110,25 +112,102 @@ $(document).ready(function() {
                     contentType: 'application/json',
                     dataType: 'json',
                     data: JSON.stringify({
-                        server: { 
-                            name:  selectedServers()[i].text, 
-                            value: selectedServers()[i].value }, 
-                        command: { 
-                            name: selectedCommand().text, 
-                            value: selectedCommand().value},
-                        file: editor.getValue()
-                        })
+                        server: selectedServers()[i],
+                        command: selectedCommand(),
+                        file: selectedCommand().value.file ? editor.getValue() : null
+                    })
                 })
                 .done(function(res) {
                     // console.log(res); 
-
                 })
                 .fail(function(err) {
                     console.log("error");
                     console.log(err);
+                    return false;
                 });
             }
-        }    
+            return true;
+        }
+
+        function applyCommand (server, command) {
+            $.ajax({
+                url: 'commands/saveAndApply',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    server: { name: 'Test', value: serversRaw.Test },
+                    command: { name: 'runTest', value: commandsRaw.runTest },
+                    file: null
+                })
+            })
+            .done(function(res) {
+                // console.log(res); 
+            })
+            .fail(function(err) {
+                console.log("error");
+                console.log(err);
+                return false;
+            });
+        }
+
+        function deploy () {
+            console.log({ name: 'Test', value: serversRaw.Test });
+            console.log({
+                    server: { name: 'Test', value: serversRaw.Test },
+                    command: { name: 'runTest', value: commandsRaw.runTest },
+                    file: null
+                });
+
+            $.ajax({
+                url: 'commands/saveAndApply',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    server: { name: 'Test', value: serversRaw.Test },
+                    command: { name: 'runTest', value: commandsRaw.runTest },
+                    file: null
+                })
+            })
+            .done(function(res) {
+                console.log(commandsRaw);
+                if (res.code == 0) {
+                    console.log(selectedServers());
+                    for (var i = 0; i < selectedServers().length; i++) {
+                        if (selectedServers()[i].name == "Test") continue;
+                        $.ajax({
+                            url: 'commands/saveAndApply',
+                            type: 'POST',
+                            contentType: 'application/json',
+                            dataType: 'json',
+                            data: JSON.stringify({
+                                server: selectedServers()[i],
+                                command: {name: 'runCns', value: commandsRaw.runCns},
+                                file: selectedCommand().value.file ? editor.getValue() : null
+                            })
+                        })
+                        .done(function(res2) {
+                            if(res2.code != 0) return false;
+                        })
+                        .fail(function(err) {
+                            console.log("error");
+                            console.log(err);
+                            return false;
+                        });
+                    }
+                }
+            })
+            .fail(function(err) {
+                console.log("error");
+                console.log(err);
+                return false;
+            });
+
+            return true;
+        }
+
+
 
 
 
@@ -141,7 +220,7 @@ $(document).ready(function() {
             var result = [];
             for (var prop in obj) {
                 if (obj.hasOwnProperty(prop)) {
-                    result.push({text: prop, value: obj[prop]}); 
+                    result.push({name: prop, value: obj[prop]}); 
                 }  
             }
             
@@ -164,6 +243,7 @@ $(document).ready(function() {
 
             // methods
             saveAndApply: saveAndApply,
+            deploy: deploy,
             showTab: showTab
         };
     }

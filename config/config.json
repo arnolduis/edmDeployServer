@@ -4,12 +4,18 @@
       "command": "echo 'Sikerult ekozni'"
     },
     "testCopy": {
-      "file": "./scripts/test.txt",
-      "path": "/home/ferar/cns.sh",
-      "command": "tail ./test.txt"
+      "file": "./scripts/cica.txt",
+      "path": "/home/ferar/cica.txt",
+      "command": "tail ./cica.txt"
+    },
+    "runCns": {
+      "command": "chmod a+x ./cns.sh; ./cns.sh"
+    },
+    "runTest": {
+      "command": "chmod a+x ./test.sh; ./test.sh"
     },
     "testStream": {
-      "file": "./testStream.txt",
+      "file": "./testStream.sh",
       "path": "/home/ferar/testStream.sh",
       "command": "chmod a+x ./testStream.sh; ./testStream.sh"
     }

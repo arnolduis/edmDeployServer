@@ -1,6 +1,7 @@
 body {
-  padding: 0px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+	overflow: hidden;
+  	padding: 0px;
+  	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 
 a {
@@ -16,6 +17,10 @@ a {
 	float: left;
 	width: 48%;
 	min-height: 600px;
+}
+
+.textAreaContainer {
+	overflow: hidden;
 }
 
 .widget textarea {
@@ -48,4 +53,69 @@ a {
 
 .selectedTab {
 	background-color: #def;
+}
+
+@font-face {
+    font-family: LeagueGothicRegular;
+    src: url(LeagueGothic-Regular.otf);
+}
+
+.bigred, .bigred:visited {
+	width: 140px;
+	color: #fff;
+	font: 28px/30px LeagueGothicRegular;
+	text-transform: uppercase;
+	text-shadow: #6f0909 0 -1px 1px;
+	border: 1px solid #6F0909;
+	display: inline-block;
+	padding-top: 40px;
+	padding-bottom: 40px;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	-moz-box-shadow: inset rgba(255,255,255,.8) 0 2px 4px;
+	-webkit-box-shadow: inset rgba(255,255,255,.8) 0 2px 4px;
+	box-shadow: inset rgba(255,255,255,.8) 0 2px 4px;
+	background: -moz-linear-gradient(top, rgba(180,9,9,1) 0%, rgba(111,9,9,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(180,9,9,1)), color-stop(100%,rgba(111,9,9,1)));
+	background: -webkit-linear-gradient(top, rgba(180,9,9,1) 0%,rgba(111,9,9,1) 100%);
+	background: -o-linear-gradient(top, rgba(180,9,9,1) 0%,rgba(111,9,9,1) 100%);
+	background: linear-gradient(top, rgba(180,9,9,1) 0%,rgba(111,9,9,1) 100%);
+	-moz-background-clip: padding-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+	-webkit-transform: rotate(-12deg);
+	-moz-transform: rotate(-12deg);
+	-ms-transform: rotate(-12deg);
+	-o-transform: rotate(-12deg);
+	transform: rotate(-12deg);
+}
+
+.bigred:hover {
+	cursor: pointer;
+	-moz-box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px, inset rgba(255,255,255,.8) 0 2px 4px;
+	-webkit-box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px, inset rgba(255,255,255,.8) 0 2px 4px;
+	box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px, inset rgba(255,255,255,.8) 0 2px 4px;
+	-moz-transform: rotate(0deg);
+	-moz-transition: -moz-transform 0.3s ease-out;
+	-webkit-transform: rotate(0deg);
+	-webkit-transition: -webkit-transform 0.3s ease-out;
+	-o-transform: rotate(0deg);
+	-o-transition: -o-transform 0.3s ease-out;
+}
+.bigred:focus {
+	outline: none;
+}
+.bigred:active {
+	-moz-box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px , inset rgba(0,0,0,.5) 0 4px 4px;
+	-webkit-box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px , inset rgba(0,0,0,.5) 0 4px 4px;
+	box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px , inset rgba(0,0,0,.5) 0 4px 4px;
+	background: -moz-linear-gradient(top, rgba(111,9,9,1) 0%, rgba(180,9,9,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(111,9,9,1)), color-stop(100%,rgba(180,9,9,1)));
+	background: -webkit-linear-gradient(top, rgba(111,9,9,1) 0%,rgba(180,9,9,1) 100%);
+	background: -o-linear-gradient(top, rgba(111,9,9,1) 0%,rgba(180,9,9,1) 100%);
+	background: linear-gradient(top, rgba(111,9,9,1) 0%,rgba(180,9,9,1) 100%);
+	-moz-background-clip: padding-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
 }

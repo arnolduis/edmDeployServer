@@ -16,6 +16,7 @@ module.exports = function (app, io) {
 	});
 
 	app.post('/commands/saveAndApply', function (req, res) {
+		console.log(req.body);
 
 		nconf.set("commands:" + req.body.command.name, req.body.command.value);
 		nconf.save(function (err) {

@@ -172,7 +172,7 @@ $(document).ready(function() {
             })
             .done(function(res) {
                 console.log(commandsRaw);
-                if (res.code == 0) {
+                if (res.code == 0) { 
                     console.log(selectedServers());
                     for (var i = 0; i < selectedServers().length; i++) {
                         if (selectedServers()[i].name == "Test") continue;

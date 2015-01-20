@@ -5,7 +5,7 @@ nconf.file({ file: 'config/config.json' });
 var privateKey = nconf.get("privateKey");
 
 
-module.exports = function (app, io) {
+module.exports = function (app, io) 
 
 
 	app.post('/commands/getFile', function (req, res) {

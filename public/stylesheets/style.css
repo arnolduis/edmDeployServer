@@ -1,5 +1,4 @@
 body {
-	overflow: hidden;
   	padding: 0px;
   	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
@@ -17,10 +16,6 @@ a {
 	float: left;
 	width: 48%;
 	min-height: 600px;
-}
-
-.textAreaContainer {
-	overflow: hidden;
 }
 
 .widget textarea {

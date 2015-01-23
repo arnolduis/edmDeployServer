@@ -15,7 +15,7 @@
       "command": "chmod a+x ./test.sh; ./test.sh"
     },
     "testStream": {
-      "file": "./testStream.sh",
+      "file": "./scripts/testStream.sh",
       "path": "/home/ferar/testStream.sh",
       "command": "chmod a+x ./testStream.sh; ./testStream.sh"
     }

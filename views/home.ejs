@@ -2,11 +2,12 @@
 <html>
   <head>
     <title>EDM Deploy Server</title>
-    <link rel="stylesheet" href="/stylesheets/style.css">
+    <link rel="stylesheet" href="/stylesheets/style.css"> 
     <script src="/javascripts/jquery-1.11.1.min.js"></script>
     <script src="/javascripts/knockout-3.1.0.js"></script>
-    <script src="javascripts/src-min-noconflict/ace.js"></script>
-    <script src="javascripts/dateFormat.js"></script>
+    <script src="/javascripts/src-min-noconflict/ace.js"></script>
+    <script src="/javascripts/dateFormat.js"></script>
+    <script src="/javascripts/async.js"></script>
     <script src="/socket.io/socket.io.js"></script>
 
     <script src="homeVM.js"></script>
@@ -16,26 +17,25 @@
 
     <div class="widget">
         <h2>Servers</h2>
-        <select data-bind="options: servers, optionsText: 'name', selectedOptions: selectedServers" size="4" multiple="true"></select>
-            <button class="bigred" data-bind="click: deploy">Deploy<br>it!</button>
+        <select data-bind="options: servers, selectedOptions: selectedServers" size="4" multiple="true"></select>
+        <button class="bigred" data-bind="click: deploy">Deploy<br>it!</button>
     </div>
 
     <div class="widget" id="file">
         <h2>Command</h2>
-        <select data-bind="options: commands, optionsText: 'name', value: selectedCommand"></select>
-        <div> <b>Command:</b> <input data-bind="value: selectedCommand().value.command"></input> </div>
-        <div data-bind="visible: selectedCommand().value.file"> <b>File:</b> <input data-bind="value: selectedCommand().value.file"></input> </div>
-        <div data-bind="visible: selectedCommand().value.path"> <b>Path:</b> <input data-bind="value: selectedCommand().value.path"></input> </div>
-        <!-- <textarea data-bind="value: file, visible: selectedCommand().value.file"></textarea /> -->
-        <div id="editor" data-bind="visible: selectedCommand().value.file"></div>
-        <button data-bind="click: saveAndApply">Save and Apply</button>
+        <select data-bind="options: commands, value: selectedCommand"></select>
+        <div> <b>Command:</b> <input data-bind="value: selCmdData().command"></input> </div>
+        <div data-bind="visible: selCmdData().file"> <b>File:</b> <input data-bind="value: commandsData()[selectedCommand()].file"></input> </div>
+        <div data-bind="visible: selCmdData().path"> <b>Path:</b> <input data-bind="value: commandsData()[selectedCommand()].path"></input> </div>
+        <div id="editor" data-bind="visible: selCmdData().file"></div>
+        <button data-bind="click: applyCommand">Save and Apply</button>
     </div>
 
     <div class="widget" id="output">
         <h2>Output:</h2>
         <ul data-bind="foreach: outputServers">
             <li>
-                <a href="#" class="$index()" data-bind="click: $parent.showTab, text: name, css: {selectedTab:  $parent.selectedOutput() == name}"></a>
+                <a href="#" data-bind="click: $parent.showTab, text: $data, css: {selectedTab:  $parent.selectedOutput() == $data}"></a>
             </li>
         </ul>
         <br>
@@ -48,6 +48,3 @@
 
   </body>
 </html>
-
-        <!-- <div id="editor" data-bind="value: file, visible: selectedCommand().value.file"></div> -->
-    <!-- // <script src="javascripts/src-min-noconflict/ace.js"></script> -->

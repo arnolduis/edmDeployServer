@@ -2,32 +2,30 @@ $(document).ready(function() {
 
     function homeVM() { 
 
-        var commandsData = ko.observable(%commands%);
-        var commands = Object.keys(commandsData());
+        var commands = ko.observable(%commands% );
+        var deployIsAvailable = ko.observable(true);
         var editor = ace.edit("editor");
+        var isSaveAndApplyAvailable = ko.observable(true);
         var output = ko.observable("");
         var outputData  = ko.observable({});
-        var outputServers = ko.observableArray([]);
+        var outputServers = ['full'];
         var selectedCommand = ko.observable(commands[0]);
-        var selCmdData = ko.computed(function  () {
-            return commandsData()[selectedCommand()];
-        });
         var selectedOutput = ko.observable("full");
-        var serversData = ko.observable(%servers%);
-        var servers = Object.keys(serversData()); // name text of available servers
-        var selectedServers = ko.observableArray([servers[0]]);
+        var servers = ko.observable(%servers%);
+        var selectedServers = ko.observableArray([servers()[0]]);
 
         // Data preparation
-        outputServers(["full"].concat(servers));
-        selCmdData.subscribe(function () {
-            if (selCmdData().file) {
-                getFile(selCmdData().file);
-                // console.log(filebuff);
-                // editor.setValue(filebuff);
+        selectedServers.subscribe(function () {
+            console.log(selectedServers());
+        });
+        selectedCommand.subscribe(function () {
+            if (selectedCommand().file) {
+                getFile(selectedCommand().file);
             }
         });
-        
-        console.log(commandsData());
+        for (var i = 0; i < servers().length; i++) {
+            outputServers.push(servers()[i].name);
+        }
 
         function generateFull() {
             var buff = "";
@@ -52,7 +50,7 @@ $(document).ready(function() {
         });
 
         socket.on("stdout", function (data){
-            console.log(data);
+            // console.log(data);
             var buff = outputData();
             buff[data.name] = buff[data.name] ? buff[data.name] : "";
             buff[data.name] = buff[data.name] + data.output;
@@ -77,9 +75,7 @@ $(document).ready(function() {
                 data: JSON.stringify({ file: file })
             })
             .done(function(res) {
-                // console.log(res);
                 editor.setValue(res.file);
-                // return res.file;
             })
             .fail(function(err) {
                 console.log("error");
@@ -87,121 +83,75 @@ $(document).ready(function() {
             });
         }
 
-
+        /**
+        *  
+        */
         function applyCommand () {
-            saveAndApply(
-                selectedServers(),
-                selectedCommand(),
-                selCmdData(),
-                editor.getValue()
-            );
-        }
-
-        function deploy () {
+            if (selectedServers().length<1) return console.log("No servers were seleced");
+            isSaveAndApplyAvailable(false);
             $.ajax({
                 url: 'commands/saveAndApply',
                 type: 'POST',
                 contentType: 'application/json',
                 dataType: 'json',
                 data: JSON.stringify({
-                    server: 'Test',
-                    command: 'runTest',
-                    commandData:  commandsData().runTest,
-                    file:  null
+                    servers: selectedServers(),
+                    command: selectedCommand(),
+                    file: editor.getValue() || null
                 })
             })
             .done(function(res) {
+                // console.log(res);
+                isSaveAndApplyAvailable(true);
                 if (res.code !== 0) return false;
-
-                var servers = ['Ireland', 'Sydney', 'Virginia'];
-                for (var i = 0; i < servers.length; i++) {
-                    $.ajax({
-                        url: 'commands/saveAndApply',
-                        type: 'POST',
-                        contentType: 'application/json',
-                        dataType: 'json',
-                        data: JSON.stringify({
-                            server: servers[i],
-                            command: 'runCns',
-                            commandData:  commandsData().runCns,
-                            file:  null
-                        })
-                    })
-                    .done(function(res) {
-                        if (res.code !== 0) return false;
-                    })
-                    .fail(function(err) {
-                        console.log("error");
-                        console.log(err);
-                        return false;
-                    });
-                }
+                return true;
             })
             .fail(function(err) {
                 console.log("error");
                 console.log(err);
                 return false;
             });
-            return true;
-        }
-        /**
-        * Goes through a series of servers and execites commmand
-        */
-        function saveAndApply (servers, command, commandData, file, callback) {
-
-            for (var i = 0; i < servers.length; i++) {
-                $.ajax({
-                    url: 'commands/saveAndApply',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    data: JSON.stringify({
-                        server: servers[i],
-                        command: command,
-                        commandData: commandData || null,
-                        file: file || null
-                    })
-                })
-                .done(function(res) {
-                    if (res.code !== 0) return false;
-                })
-                .fail(function(err) {
-                    console.log("error");
-                    console.log(err);
-                    return false;
-                });
-            }
-            return true;
         }
 
+        function applyTestCommand () {
+            deployIsAvailable(false);
+            console.log('applytext');
+            $.ajax({
+                url: 'commands/testCommand',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType: 'json',
+                data: JSON.stringify({
+                    "command": "testAndDeploy" //ttt 
+                })
+            })
+            .done(function(res) {
+                console.log(res);
+                deployIsAvailable(true);
+            })
+            .fail(function(err) {
+                console.log("error");
+                console.log(err);
+                return false;
+            });
 
-        function toObsArray(obj) {
-            var result = [];
-            for (var prop in obj) {
-                if (obj.hasOwnProperty(prop)) {
-                    result.push({name: prop, value: obj[prop]}); 
-                }  
-            }
-            
-            return ko.observableArray(result);
         }
 
         return {
             commands: commands,
-            commandsData: commandsData,
             servers: servers,
-            serversData: serversData,
             selectedServers: selectedServers,
             selectedCommand: selectedCommand,
-            selCmdData: selCmdData,
             selectedOutput: selectedOutput,
             outputData: outputData,
             outputServers: outputServers,
             output: output,
+            deployIsAvailable: deployIsAvailable,
+            isSaveAndApplyAvailable: isSaveAndApplyAvailable,
             // methods
-            saveAndApply: saveAndApply,
+            // saveAndApply: saveAndApply,
             applyCommand: applyCommand,
-            deploy: deploy,
+            applyTestCommand: applyTestCommand,
             showTab: showTab
         };
     }

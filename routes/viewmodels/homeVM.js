@@ -8,14 +8,21 @@ module.exports = function(app) {
 
 		var commands = nconf.get("commands");
 		var servers = nconf.get("servers");
-		var privateKey = nconf.get("privateKey");
 
 		fs.readFile('viewmodels/homeVM.js', 'utf8', function (err,result) {
 			if (err) console.log(err);
 
-			result = result.replace(/%servers%/g, JSON.stringify(servers));
-			result = result.replace(/%commands%/g, JSON.stringify(commands));
+			result = result.replace(/%servers%/g, JSON.stringify(toArray(servers)));
+			result = result.replace(/%commands%/g, JSON.stringify(toArray(commands)));
 	        res.send(result);
 		});
 	});	
+
+	function toArray (jsonObject) {
+		var buff = [];
+		for (var i in jsonObject) {
+			buff.push(jsonObject[i]);
+		}
+		return buff;
+	}
 };

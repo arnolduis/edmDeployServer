@@ -1,46 +1,74 @@
 {
   "commands": {
     "deploy": {
-      "command": "echo 'Sikerult ekozni'"
+      "name": "deploy",
+      "command": "echo deployoltam"
     },
     "testCopy": {
+      "name": "testCopy",
       "file": "./scripts/cica.txt",
       "path": "/home/ferar/cica.txt",
       "command": "tail ./cica.txt"
     },
     "runCns": {
+      "name": "runCns",
       "command": "chmod a+x ./cns.sh; ./cns.sh"
     },
     "runTest": {
+      "name": "runTest",
       "command": "chmod a+x ./test.sh; ./test.sh"
     },
     "testStream": {
+      "name": "testStream",
       "file": "./scripts/testStream.sh",
       "path": "/home/ferar/testStream.sh",
       "command": "chmod a+x ./testStream.sh; ./testStream.sh"
     }
   },
-  "servers": {
-    "Test": {
-      "host": "turdus.itk.ppke.hu",
-      "port": "22",
-      "username": "ferar"
-    },
-    "Ireland": {
-      "host": "turdus.itk.ppke.hu",
-      "port": "22",
-      "username": "ferar"
-    },
-    "Sydney": {
-      "host": "turdus.itk.ppke.hu",
-      "port": "22",
-      "username": "ferar"
-    },
-    "Virginia": {
-      "host": "turdus.itk.ppke.hu",
-      "port": "22",
-      "username": "ferar"
+  "testCommands": {
+    "testAndDeploy": {
+      "name": "testAndDeploy",
+      "test": {
+        "server": "Test",
+        "command": "runTest"
+      },
+      "command": {
+        "servers": [
+          "Ireland",
+          "Sydney"
+        ],
+        "command": "deploy"
+      }
     }
   },
-  "privateKey": "C:/cygwin64/home/Dell/.ssh/id_dsa"
+  "servers": {
+    "Test": {
+      "name": "Test",
+      "host": "turdus.itk.ppke.hu",
+      "port": "22",
+      "username": "ferar",
+      "privateKey": "C:/cygwin64/home/Dell/.ssh/id_dsa"
+    },
+    "Ireland": {
+      "name": "Ireland",
+      "host": "turdus.itk.ppke.hu",
+      "port": "22",
+      "username": "ferar",
+      "privateKey": "C:/cygwin64/home/Dell/.ssh/id_dsa"
+    },
+    "Sydney": {
+      "name": "Sydney",
+      "host": "turdus.itk.ppke.hu",
+      "port": "22",
+      "username": "ferar",
+      "privateKey": "C:/cygwin64/home/Dell/.ssh/id_dsa"
+    },
+    "Virginia": {
+      "name": "Virginia",
+      "host": "turdus.itk.ppke.hu",
+      "port": "22",
+      "username": "ferar",
+      "privateKey": "C:/cygwin64/home/Dell/.ssh/id_dsa"
+    }
+  }
 }

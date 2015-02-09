@@ -118,3 +118,29 @@ text-align:center;
 	-webkit-background-clip: padding-box;
 	background-clip: padding-box;
 }
+
+.bigredDisabled {
+	cursor: pointer;
+	-moz-box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px, inset rgba(255,255,255,.8) 0 2px 4px;
+	-webkit-box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px, inset rgba(255,255,255,.8) 0 2px 4px;
+	box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px, inset rgba(255,255,255,.8) 0 2px 4px;
+	-moz-transform: rotate(0deg);
+	-moz-transition: -moz-transform 0.3s ease-out;
+	-webkit-transform: rotate(0deg);
+	-webkit-transition: -webkit-transform 0.3s ease-out;
+	-o-transform: rotate(0deg);
+	-o-transition: -o-transform 0.3s ease-out;
+	-moz-box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px , inset rgba(0,0,0,.5) 0 4px 4px;
+	-webkit-box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px , inset rgba(0,0,0,.5) 0 4px 4px;
+	box-shadow: rgba(255,255,255,1) 0 0 20px, rgba(255,255,255,1) 0 0 30px , inset rgba(0,0,0,.5) 0 4px 4px;
+
+	background: -moz-linear-gradient(top, rgba(111,9,9,1) 0%, rgba(180,180,180,1) 100%);
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(180,180,180,1)), color-stop(100%,rgba(180,180,180,1)));
+	background: -webkit-linear-gradient(top, rgba(111,9,9,1) 0%,rgba(180,180,180,1) 100%);
+	background: -o-linear-gradient(top, rgba(111,9,9,1) 0%,rgba(180,180,180,1) 100%);
+	background: linear-gradient(top, rgba(111,9,9,1) 0%,rgba(180,180,180,1) 100%);
+
+	-moz-background-clip: padding-box;
+	-webkit-background-clip: padding-box;
+	background-clip: padding-box;
+}

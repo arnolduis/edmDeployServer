@@ -32,7 +32,24 @@ if ('development' == app.get('env')) {
 	app.use(express.errorHandler());
 }
 
-// ==================== Logic ==========================
+// Testing if testAndApply commands are refering to existing fields
+nconf.file({ file: 'config/config.json' });
+var config = nconf.get();
+var configOK = true;
+for (var testCommand in config.testCommands) {
+	if (!config.commands[config.testCommands[testCommand].test.command] ||
+		!config.commands[config.testCommands[testCommand].command.command] ||
+		!config.servers[config.testCommands[testCommand].test.server]) {
+		console.log('Command config wrong');
+		process.exit(1);
+	}
+	for (var i = 0; i < config.testCommands[testCommand].command.servers.length; i++) {
+		if (!config.servers[config.testCommands[testCommand].command.servers[i]]) {
+			console.log('Command config wrong');
+			process.exit(1);
+		}
+	}
+}
 
 var server = app.listen(app.get('port'));
 console.log('Express server listening on port ' + app.get('port'));
